@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>World Clock</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem 3rem;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.4rem;
+      background: linear-gradient(135deg, #58a6ff, #bc8cff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: #8b949e;
+      margin-bottom: 2.5rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+      width: 100%;
+      max-width: 900px;
+    }
+
+    .card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 14px;
+      padding: 1.5rem 1.75rem;
+      transition: transform 0.2s, border-color 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--accent, #58a6ff);
+      border-radius: 14px 14px 0 0;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent, #58a6ff);
+    }
+
+    .flag {
+      font-size: 2rem;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .city {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #e6edf3;
+    }
+
+    .country {
+      font-size: 0.8rem;
+      color: #8b949e;
+      margin-bottom: 1rem;
+    }
+
+    .time {
+      font-size: 2.4rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
+      color: var(--accent, #58a6ff);
+      line-height: 1.1;
+    }
+
+    .date {
+      font-size: 0.82rem;
+      color: #8b949e;
+      margin-top: 0.3rem;
+    }
+
+    footer {
+      margin-top: 3rem;
+      font-size: 0.78rem;
+      color: #484f58;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🌍 World Clock</h1>
+  <p class="subtitle">Live times updated every second</p>
+
+  <div class="grid" id="grid"></div>
+
+  <footer>Times shown in each city's local timezone &bull; Updates automatically</footer>
+
+  <script>
+    const cities = [
+      { city: 'New York',  country: 'United States', tz: 'America/New_York',  flag: '🇺🇸', accent: '#58a6ff' },
+      { city: 'London',    country: 'United Kingdom', tz: 'Europe/London',     flag: '🇬🇧', accent: '#bc8cff' },
+      { city: 'Beijing',   country: 'China',          tz: 'Asia/Shanghai',     flag: '🇨🇳', accent: '#ff7b72' },
+      { city: 'Kyiv',      country: 'Ukraine',        tz: 'Europe/Kiev',       flag: '🇺🇦', accent: '#3fb950' },
+      { city: 'Moscow',    country: 'Russia',         tz: 'Europe/Moscow',     flag: '🇷🇺', accent: '#ffa657' },
+      { city: 'Tehran',    country: 'Iran',           tz: 'Asia/Tehran',       flag: '🇮🇷', accent: '#f0883e' },
+    ];
+
+    const grid = document.getElementById('grid');
+
+    const timeFormatters = {};
+    const dateFormatters = {};
+
+    cities.forEach(c => {
+      timeFormatters[c.tz] = new Intl.DateTimeFormat('en-US', {
+        timeZone: c.tz,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true,
+      });
+      dateFormatters[c.tz] = new Intl.DateTimeFormat('en-US', {
+        timeZone: c.tz,
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      });
+
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.style.setProperty('--accent', c.accent);
+      card.innerHTML = `
+        <div class="flag">${c.flag}</div>
+        <div class="city">${c.city}</div>
+        <div class="country">${c.country}</div>
+        <div class="time" id="time-${c.tz.replace(/\//g, '-')}">--:--:--</div>
+        <div class="date" id="date-${c.tz.replace(/\//g, '-')}">---</div>
+      `;
+      grid.appendChild(card);
+    });
+
+    function updateClocks() {
+      const now = new Date();
+      cities.forEach(c => {
+        const id = c.tz.replace(/\//g, '-');
+        document.getElementById('time-' + id).textContent = timeFormatters[c.tz].format(now);
+        document.getElementById('date-' + id).textContent = dateFormatters[c.tz].format(now);
+      });
+    }
+
+    updateClocks();
+    setInterval(updateClocks, 1000);
+  </script>
+</body>
+</html>
