@@ -41,6 +41,7 @@
       align-items: flex-start;
     }
 
+    /* Analog panel */
     .analog-panel {
       display: flex;
       flex-direction: column;
@@ -83,10 +84,11 @@
       margin-top: 0.4rem;
     }
 
+    /* Fixed 2-column grid */
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.25rem;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
       flex: 1;
     }
 
@@ -94,7 +96,7 @@
       background: #161b22;
       border: 1px solid #30363d;
       border-radius: 14px;
-      padding: 1.25rem 1.5rem;
+      padding: 1.1rem 1.3rem;
       transition: transform 0.2s, border-color 0.2s;
       position: relative;
       overflow: hidden;
@@ -114,12 +116,12 @@
       border-color: var(--accent, #58a6ff);
     }
 
-    .flag { font-size: 1.8rem; line-height: 1; margin-bottom: 0.4rem; }
-    .city { font-size: 1.05rem; font-weight: 600; color: #e6edf3; }
-    .country { font-size: 0.78rem; color: #8b949e; margin-bottom: 0.75rem; }
+    .flag    { font-size: 1.6rem; line-height: 1; margin-bottom: 0.35rem; }
+    .city    { font-size: 1rem; font-weight: 600; color: #e6edf3; }
+    .country { font-size: 0.75rem; color: #8b949e; margin-bottom: 0.6rem; }
 
     .time {
-      font-size: 2rem;
+      font-size: 1.75rem;
       font-weight: 700;
       font-variant-numeric: tabular-nums;
       letter-spacing: -0.02em;
@@ -127,7 +129,7 @@
       line-height: 1.1;
     }
 
-    .date { font-size: 0.78rem; color: #8b949e; margin-top: 0.25rem; }
+    .date { font-size: 0.75rem; color: #8b949e; margin-top: 0.2rem; }
 
     footer {
       margin-top: 3rem;
@@ -138,6 +140,7 @@
     @media (max-width: 700px) {
       .layout { flex-direction: column; align-items: center; }
       .analog-panel { width: 100%; max-width: 320px; }
+      .grid { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
@@ -164,12 +167,14 @@
 
   <script>
     var cities = [
-      { city: 'New York',  country: 'United States',  tz: 'America/New_York',  flag: '\uD83C\uDDFA\uD83C\uDDF8', accent: '#58a6ff' },
-      { city: 'London',    country: 'United Kingdom',  tz: 'Europe/London',     flag: '\uD83C\uDDEC\uD83C\uDDE7', accent: '#bc8cff' },
-      { city: 'Beijing',   country: 'China',           tz: 'Asia/Shanghai',     flag: '\uD83C\uDDE8\uD83C\uDDF3', accent: '#ff7b72' },
-      { city: 'Riyadh',    country: 'Saudi Arabia',    tz: 'Asia/Riyadh',       flag: '\uD83C\uDDF8\uD83C\uDDE6', accent: '#3fb950' },
-      { city: 'Taipei',    country: 'Taiwan',          tz: 'Asia/Taipei',       flag: '\uD83C\uDDF9\uD83C\uDDFC', accent: '#ffa657' },
-      { city: 'Sydney',    country: 'Australia',       tz: 'Australia/Sydney',  flag: '\uD83C\uDDE6\uD83C\uDDFA', accent: '#ff69b4' }
+      { city: 'New York',  country: 'United States',  tz: 'America/New_York',    flag: '\uD83C\uDDFA\uD83C\uDDF8', accent: '#58a6ff' },
+      { city: 'London',    country: 'United Kingdom',  tz: 'Europe/London',       flag: '\uD83C\uDDEC\uD83C\uDDE7', accent: '#bc8cff' },
+      { city: 'Lagos',     country: 'Nigeria',         tz: 'Africa/Lagos',        flag: '\uD83C\uDDF3\uD83C\uDDEC', accent: '#3fb950' },
+      { city: 'Riyadh',    country: 'Saudi Arabia',    tz: 'Asia/Riyadh',         flag: '\uD83C\uDDF8\uD83C\uDDE6', accent: '#ffa657' },
+      { city: 'Taipei',    country: 'Taiwan',          tz: 'Asia/Taipei',         flag: '\uD83C\uDDF9\uD83C\uDDFC', accent: '#79c0ff' },
+      { city: 'Tokyo',     country: 'Japan',           tz: 'Asia/Tokyo',          flag: '\uD83C\uDDEF\uD83C\uDDF5', accent: '#ff7b72' },
+      { city: 'Casablanca',country: 'Morocco',         tz: 'Africa/Casablanca',   flag: '\uD83C\uDDF2\uD83C\uDDE6', accent: '#f0d060' },
+      { city: 'Sydney',    country: 'Australia',       tz: 'Australia/Sydney',    flag: '\uD83C\uDDE6\uD83C\uDDFA', accent: '#ff69b4' }
     ];
 
     var grid = document.getElementById('grid');
@@ -198,6 +203,7 @@
       grid.appendChild(card);
     });
 
+    /* Analog clock */
     var canvas = document.getElementById('analogClock');
     var ctx    = canvas.getContext('2d');
     var cx     = canvas.width / 2;
@@ -237,7 +243,7 @@
         ctx.moveTo(cx + Math.cos(angle) * inner, cy + Math.sin(angle) * inner);
         ctx.lineTo(cx + Math.cos(angle) * (radius - 3), cy + Math.sin(angle) * (radius - 3));
         ctx.strokeStyle = isQ ? '#58a6ff' : '#484f58';
-        ctx.lineWidth = isQ ? 2.5 : 1.5;
+        ctx.lineWidth   = isQ ? 2.5 : 1.5;
         ctx.stroke();
       }
 
