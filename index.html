@@ -123,7 +123,7 @@
       { city: 'Beijing',   country: 'China', tz: 'Asia/Shanghai', flag: '🇨🇳', accent: '#ff7b72' },
       { city: 'Riyadh',    country: 'Saudi Arabia', tz: 'Asia/Riyadh', flag: '🇸🇦', accent: '#3fb950' },
       { city: 'Taipei',    country: 'Taiwan', tz: 'Asia/Taipei', flag: '🇹🇼', accent: '#ffa657' },
-      { city: 'Sydney',    country: 'Australia', tz: 'Australia/Sydney', flag: '���🇺', accent: '#ff69b4' },
+      { city: 'Sydney',    country: 'Australia', tz: 'Australia/Sydney', flag: '🇦🇺', accent: '#ff69b4' },
     ];
 
     const grid = document.getElementById('grid');
@@ -154,8 +154,8 @@
         <div class="flag">${c.flag}</div>
         <div class="city">${c.city}</div>
         <div class="country">${c.country}</div>
-        <div class="time" id="time-${c.tz.replace(/\/g, '-')}">--:--:--</div>
-        <div class="date" id="date-${c.tz.replace(/\/g, '-')}">---</div>
+        <div class="time" id="time-${c.tz.replace(/\//g, '-')}">--:--:--</div>
+        <div class="date" id="date-${c.tz.replace(/\//g, '-')}">---</div>
       `;
       grid.appendChild(card);
     });
@@ -163,7 +163,7 @@
     function updateClocks() {
       const now = new Date();
       cities.forEach(c => {
-        const id = c.tz.replace(/\/g, '-');
+        const id = c.tz.replace(/\//g, '-');
         document.getElementById('time-' + id).textContent = timeFormatters[c.tz].format(now);
         document.getElementById('date-' + id).textContent = dateFormatters[c.tz].format(now);
       });
