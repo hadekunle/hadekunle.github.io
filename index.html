@@ -41,7 +41,6 @@
       align-items: flex-start;
     }
 
-    /* Analog panel */
     .analog-panel {
       display: flex;
       flex-direction: column;
@@ -84,7 +83,6 @@
       margin-top: 0.4rem;
     }
 
-    /* Fixed 2-column grid */
     .grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -131,6 +129,67 @@
 
     .date { font-size: 0.75rem; color: #8b949e; margin-top: 0.2rem; }
 
+    /* Custom slot card */
+    .custom-card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 14px;
+      padding: 1.1rem 1.3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .custom-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: #bc8cff;
+      border-radius: 14px 14px 0 0;
+    }
+
+    .custom-card select {
+      width: 100%;
+      background: #0d1117;
+      color: #bc8cff;
+      border: 1px solid #bc8cff;
+      border-radius: 8px;
+      padding: 0.4rem 0.5rem;
+      font-size: 0.82rem;
+      font-family: inherit;
+      margin-bottom: 0.75rem;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .custom-card select:focus {
+      border-color: #bc8cff;
+      box-shadow: 0 0 0 2px rgba(188,140,255,0.2);
+    }
+
+    .custom-slot-label {
+      font-size: 0.7rem;
+      color: #bc8cff;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.5rem;
+    }
+
+    .custom-flag    { font-size: 1.6rem; line-height: 1; margin-bottom: 0.35rem; }
+    .custom-city    { font-size: 1rem; font-weight: 600; color: #e6edf3; }
+    .custom-country { font-size: 0.75rem; color: #8b949e; margin-bottom: 0.6rem; }
+
+    .custom-time {
+      font-size: 1.75rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
+      color: #bc8cff;
+      line-height: 1.1;
+    }
+
+    .custom-date { font-size: 0.75rem; color: #8b949e; margin-top: 0.2rem; }
+
     footer {
       margin-top: 3rem;
       font-size: 0.78rem;
@@ -167,31 +226,129 @@
 
   <script>
     var cities = [
-      { city: 'New York',  country: 'United States',  tz: 'America/New_York',    flag: '\uD83C\uDDFA\uD83C\uDDF8', accent:  '#58a6ff' },
-      { city: 'London',    country: 'United Kingdom',  tz: 'Europe/London',       flag: '\uD83C\uDDEC\uD83C\uDDE7', accent: '#58a6ff' },
-      { city: 'Lagos',     country: 'Nigeria',         tz: 'Africa/Lagos',        flag: '\uD83C\uDDF3\uD83C\uDDEC', accent: '#3fb950' },
-      { city: 'Riyadh',    country: 'Saudi Arabia',    tz: 'Asia/Riyadh',         flag: '\uD83C\uDDF8\uD83C\uDDE6', accent: '#3fb950' },
-      { city: 'Taipei',    country: 'Taiwan',          tz: 'Asia/Taipei',         flag: '\uD83C\uDDF9\uD83C\uDDFC', accent: '#ff7b72' },
-      { city: 'Agadir',    country: 'Morocco',         tz: 'Africa/Casablanca',   flag: '\uD83C\uDDF2\uD83C\uDDE6', accent: '#ff7b72' },
-      { city: 'Tokyo',     country: 'Japan',           tz: 'Asia/Tokyo',          flag: '\uD83C\uDDEF\uD83C\uDDF5', accent: '#bc8cff' },
-      { city: 'Mumbai',    country: 'India',           tz: 'Asia/Kolkata',        flag: '\uD83C\uDDEE\uD83C\uDDF3', accent: '#bc8cff' }
-      
+      { city: 'New York',  country: 'United States',  tz: 'America/New_York',  flag: '\uD83C\uDDFA\uD83C\uDDF8', accent: '#58a6ff' },
+      { city: 'London',    country: 'United Kingdom',  tz: 'Europe/London',     flag: '\uD83C\uDDEC\uD83C\uDDE7', accent: '#58a6ff' },
+      { city: 'Lagos',     country: 'Nigeria',         tz: 'Africa/Lagos',      flag: '\uD83C\uDDF3\uD83C\uDDEC', accent: '#3fb950' },
+      { city: 'Riyadh',    country: 'Saudi Arabia',    tz: 'Asia/Riyadh',       flag: '\uD83C\uDDF8\uD83C\uDDE6', accent: '#3fb950' },
+      { city: 'Taipei',    country: 'Taiwan',          tz: 'Asia/Taipei',       flag: '\uD83C\uDDF9\uD83C\uDDFC', accent: '#ff7b72' },
+      { city: 'Agadir',    country: 'Morocco',         tz: 'Africa/Casablanca', flag: '\uD83C\uDDF2\uD83C\uDDE6', accent: '#ff7b72' },
+      { city: 'Mumbai',    country: 'India',           tz: 'Asia/Kolkata',      flag: '\uD83C\uDDEE\uD83C\uDDF3', accent: '#bc8cff' }
+    ];
+
+    var countryList = [
+      { country: 'Afghanistan',        city: 'Kabul',          tz: 'Asia/Kabul',                      flag: '\uD83C\uDDE6\uD83C\uDDEB' },
+      { country: 'Argentina',          city: 'Buenos Aires',   tz: 'America/Argentina/Buenos_Aires',  flag: '\uD83C\uDDE6\uD83C\uDDF7' },
+      { country: 'Australia',          city: 'Canberra',       tz: 'Australia/Sydney',                flag: '\uD83C\uDDE6\uD83C\uDDFA' },
+      { country: 'Bangladesh',         city: 'Dhaka',          tz: 'Asia/Dhaka',                      flag: '\uD83C\uDDE7\uD83C\uDDE9' },
+      { country: 'Bolivia',            city: 'La Paz',         tz: 'America/La_Paz',                  flag: '\uD83C\uDDE7\uD83C\uDDF4' },
+      { country: 'Bosnia',             city: 'Sarajevo',       tz: 'Europe/Sarajevo',                 flag: '\uD83C\uDDE7\uD83C\uDDE6' },
+      { country: 'Brazil',             city: 'Brasilia',       tz: 'America/Sao_Paulo',               flag: '\uD83C\uDDE7\uD83C\uDDF7' },
+      { country: 'Cameroon',           city: 'Yaounde',        tz: 'Africa/Douala',                   flag: '\uD83C\uDDE8\uD83C\uDDF2' },
+      { country: 'Canada',             city: 'Ottawa',         tz: 'America/Toronto',                 flag: '\uD83C\uDDE8\uD83C\uDDE6' },
+      { country: 'Chile',              city: 'Santiago',       tz: 'America/Santiago',                flag: '\uD83C\uDDE8\uD83C\uDDF1' },
+      { country: 'China',              city: 'Beijing',        tz: 'Asia/Shanghai',                   flag: '\uD83C\uDDE8\uD83C\uDDF3' },
+      { country: 'Colombia',           city: 'Bogota',         tz: 'America/Bogota',                  flag: '\uD83C\uDDE8\uD83C\uDDF4' },
+      { country: 'Croatia',            city: 'Zagreb',         tz: 'Europe/Zagreb',                   flag: '\uD83C\uDDE8\uD83C\uDDF7' },
+      { country: 'Czech Republic',     city: 'Prague',         tz: 'Europe/Prague',                   flag: '\uD83C\uDDE8\uD83C\uDDFF' },
+      { country: 'Denmark',            city: 'Copenhagen',     tz: 'Europe/Copenhagen',               flag: '\uD83C\uDDE9\uD83C\uDDF0' },
+      { country: 'Dominican Republic', city: 'Santo Domingo',  tz: 'America/Santo_Domingo',           flag: '\uD83C\uDDE9\uD83C\uDDF4' },
+      { country: 'Ecuador',            city: 'Quito',          tz: 'America/Guayaquil',               flag: '\uD83C\uDDEA\uD83C\uDDE8' },
+      { country: 'Egypt',              city: 'Cairo',          tz: 'Africa/Cairo',                    flag: '\uD83C\uDDEA\uD83C\uDDEC' },
+      { country: 'El Salvador',        city: 'San Salvador',   tz: 'America/El_Salvador',             flag: '\uD83C\uDDF8\uD83C\uDDFB' },
+      { country: 'Ethiopia',           city: 'Addis Ababa',    tz: 'Africa/Addis_Ababa',              flag: '\uD83C\uDDEA\uD83C\uDDF9' },
+      { country: 'Finland',            city: 'Helsinki',       tz: 'Europe/Helsinki',                 flag: '\uD83C\uDDEB\uD83C\uDDEE' },
+      { country: 'France',             city: 'Paris',          tz: 'Europe/Paris',                    flag: '\uD83C\uDDEB\uD83C\uDDF7' },
+      { country: 'Gambia',             city: 'Banjul',         tz: 'Africa/Banjul',                   flag: '\uD83C\uDDEC\uD83C\uDDF2' },
+      { country: 'Germany',            city: 'Berlin',         tz: 'Europe/Berlin',                   flag: '\uD83C\uDDE9\uD83C\uDDEA' },
+      { country: 'Ghana',              city: 'Accra',          tz: 'Africa/Accra',                    flag: '\uD83C\uDDEC\uD83C\uDDED' },
+      { country: 'Greece',             city: 'Athens',         tz: 'Europe/Athens',                   flag: '\uD83C\uDDEC\uD83C\uDDF7' },
+      { country: 'Guatemala',          city: 'Guatemala City', tz: 'America/Guatemala',               flag: '\uD83C\uDDEC\uD83C\uDDF9' },
+      { country: 'Honduras',           city: 'Tegucigalpa',    tz: 'America/Tegucigalpa',             flag: '\uD83C\uDDED\uD83C\uDDF3' },
+      { country: 'Hong Kong',          city: 'Hong Kong',      tz: 'Asia/Hong_Kong',                  flag: '\uD83C\uDDED\uD83C\uDDF0' },
+      { country: 'Hungary',            city: 'Budapest',       tz: 'Europe/Budapest',                 flag: '\uD83C\uDDED\uD83C\uDDFA' },
+      { country: 'Iceland',            city: 'Reykjavik',      tz: 'Atlantic/Reykjavik',              flag: '\uD83C\uDDEE\uD83C\uDDF8' },
+      { country: 'India',              city: 'New Delhi',      tz: 'Asia/Kolkata',                    flag: '\uD83C\uDDEE\uD83C\uDDF3' },
+      { country: 'Indonesia',          city: 'Jakarta',        tz: 'Asia/Jakarta',                    flag: '\uD83C\uDDEE\uD83C\uDDE9' },
+      { country: 'Iran',               city: 'Tehran',         tz: 'Asia/Tehran',                     flag: '\uD83C\uDDEE\uD83C\uDDF7' },
+      { country: 'Iraq',               city: 'Baghdad',        tz: 'Asia/Baghdad',                    flag: '\uD83C\uDDEE\uD83C\uDDF6' },
+      { country: 'Ireland',            city: 'Dublin',         tz: 'Europe/Dublin',                   flag: '\uD83C\uDDEE\uD83C\uDDEA' },
+      { country: 'Israel',             city: 'Jerusalem',      tz: 'Asia/Jerusalem',                  flag: '\uD83C\uDDEE\uD83C\uDDF1' },
+      { country: 'Italy',              city: 'Rome',           tz: 'Europe/Rome',                     flag: '\uD83C\uDDEE\uD83C\uDDF9' },
+      { country: 'Japan',              city: 'Tokyo',          tz: 'Asia/Tokyo',                      flag: '\uD83C\uDDEF\uD83C\uDDF5' },
+      { country: 'Jordan',             city: 'Amman',          tz: 'Asia/Amman',                      flag: '\uD83C\uDDEF\uD83C\uDDF4' },
+      { country: 'Kazakhstan',         city: 'Almaty',         tz: 'Asia/Almaty',                     flag: '\uD83C\uDDF0\uD83C\uDDFF' },
+      { country: 'Kenya',              city: 'Nairobi',        tz: 'Africa/Nairobi',                  flag: '\uD83C\uDDF0\uD83C\uDDEA' },
+      { country: 'Kiribati',           city: 'Kiritimati',     tz: 'Pacific/Kiritimati',              flag: '\uD83C\uDDF0\uD83C\uDDEE' },
+      { country: 'Kuwait',             city: 'Kuwait City',    tz: 'Asia/Kuwait',                     flag: '\uD83C\uDDF0\uD83C\uDDFC' },
+      { country: 'Kyrgyzstan',         city: 'Bishkek',        tz: 'Asia/Bishkek',                    flag: '\uD83C\uDDF0\uD83C\uDDEC' },
+      { country: 'Lebanon',            city: 'Beirut',         tz: 'Asia/Beirut',                     flag: '\uD83C\uDDF1\uD83C\uDDE7' },
+      { country: 'Madagascar',         city: 'Antananarivo',   tz: 'Indian/Antananarivo',             flag: '\uD83C\uDDF2\uD83C\uDDEC' },
+      { country: 'Malaysia',           city: 'Kuala Lumpur',   tz: 'Asia/Kuala_Lumpur',               flag: '\uD83C\uDDF2\uD83C\uDDFE' },
+      { country: 'Mexico',             city: 'Mexico City',    tz: 'America/Mexico_City',             flag: '\uD83C\uDDF2\uD83C\uDDFD' },
+      { country: 'Morocco',            city: 'Casablanca',     tz: 'Africa/Casablanca',               flag: '\uD83C\uDDF2\uD83C\uDDE6' },
+      { country: 'Mozambique',         city: 'Maputo',         tz: 'Africa/Maputo',                   flag: '\uD83C\uDDF2\uD83C\uDDFF' },
+      { country: 'Myanmar',            city: 'Yangon',         tz: 'Asia/Rangoon',                    flag: '\uD83C\uDDF2\uD83C\uDDF2' },
+      { country: 'Nepal',              city: 'Kathmandu',      tz: 'Asia/Kathmandu',                  flag: '\uD83C\uDDF3\uD83C\uDDF5' },
+      { country: 'Netherlands',        city: 'Amsterdam',      tz: 'Europe/Amsterdam',                flag: '\uD83C\uDDF3\uD83C\uDDF1' },
+      { country: 'New Zealand',        city: 'Auckland',       tz: 'Pacific/Auckland',                flag: '\uD83C\uDDF3\uD83C\uDDFF' },
+      { country: 'Nicaragua',          city: 'Managua',        tz: 'America/Managua',                 flag: '\uD83C\uDDF3\uD83C\uDDEE' },
+      { country: 'Nigeria',            city: 'Lagos',          tz: 'Africa/Lagos',                    flag: '\uD83C\uDDF3\uD83C\uDDEC' },
+      { country: 'Norway',             city: 'Oslo',           tz: 'Europe/Oslo',                     flag: '\uD83C\uDDF3\uD83C\uDDF4' },
+      { country: 'Pakistan',           city: 'Islamabad',      tz: 'Asia/Karachi',                    flag: '\uD83C\uDDF5\uD83C\uDDF0' },
+      { country: 'Paraguay',           city: 'Asuncion',       tz: 'America/Asuncion',                flag: '\uD83C\uDDF5\uD83C\uDDFE' },
+      { country: 'Peru',               city: 'Lima',           tz: 'America/Lima',                    flag: '\uD83C\uDDF5\uD83C\uDDEA' },
+      { country: 'Philippines',        city: 'Manila',         tz: 'Asia/Manila',                     flag: '\uD83C\uDDF5\uD83C\uDDED' },
+      { country: 'Poland',             city: 'Warsaw',         tz: 'Europe/Warsaw',                   flag: '\uD83C\uDDF5\uD83C\uDDF1' },
+      { country: 'Portugal',           city: 'Lisbon',         tz: 'Europe/Lisbon',                   flag: '\uD83C\uDDF5\uD83C\uDDF9' },
+      { country: 'Puerto Rico',        city: 'San Juan',       tz: 'America/Puerto_Rico',             flag: '\uD83C\uDDF5\uD83C\uDDF7' },
+      { country: 'Qatar',              city: 'Doha',           tz: 'Asia/Qatar',                      flag: '\uD83C\uDDF6\uD83C\uDDE6' },
+      { country: 'Romania',            city: 'Bucharest',      tz: 'Europe/Bucharest',                flag: '\uD83C\uDDF7\uD83C\uDDF4' },
+      { country: 'Russia',             city: 'Moscow',         tz: 'Europe/Moscow',                   flag: '\uD83C\uDDF7\uD83C\uDDFA' },
+      { country: 'Saudi Arabia',       city: 'Riyadh',         tz: 'Asia/Riyadh',                     flag: '\uD83C\uDDF8\uD83C\uDDE6' },
+      { country: 'Senegal',            city: 'Dakar',          tz: 'Africa/Dakar',                    flag: '\uD83C\uDDF8\uD83C\uDDF3' },
+      { country: 'Serbia',             city: 'Belgrade',       tz: 'Europe/Belgrade',                 flag: '\uD83C\uDDF7\uD83C\uDDF8' },
+      { country: 'Singapore',          city: 'Singapore',      tz: 'Asia/Singapore',                  flag: '\uD83C\uDDF8\uD83C\uDDEC' },
+      { country: 'South Africa',       city: 'Johannesburg',   tz: 'Africa/Johannesburg',             flag: '\uD83C\uDDFF\uD83C\uDDE6' },
+      { country: 'South Korea',        city: 'Seoul',          tz: 'Asia/Seoul',                      flag: '\uD83C\uDDF0\uD83C\uDDF7' },
+      { country: 'Spain',              city: 'Madrid',         tz: 'Europe/Madrid',                   flag: '\uD83C\uDDEA\uD83C\uDDF8' },
+      { country: 'Sri Lanka',          city: 'Colombo',        tz: 'Asia/Colombo',                    flag: '\uD83C\uDDF1\uD83C\uDDF0' },
+      { country: 'Sudan',              city: 'Khartoum',       tz: 'Africa/Khartoum',                 flag: '\uD83C\uDDF8\uD83C\uDDE9' },
+      { country: 'Sweden',             city: 'Stockholm',      tz: 'Europe/Stockholm',                flag: '\uD83C\uDDF8\uD83C\uDDEA' },
+      { country: 'Switzerland',        city: 'Zurich',         tz: 'Europe/Zurich',                   flag: '\uD83C\uDDE8\uD83C\uDDED' },
+      { country: 'Taiwan',             city: 'Taipei',         tz: 'Asia/Taipei',                     flag: '\uD83C\uDDF9\uD83C\uDDFC' },
+      { country: 'Tanzania',           city: 'Dar es Salaam',  tz: 'Africa/Dar_es_Salaam',            flag: '\uD83C\uDDF9\uD83C\uDDFF' },
+      { country: 'Thailand',           city: 'Bangkok',        tz: 'Asia/Bangkok',                    flag: '\uD83C\uDDF9\uD83C\uDDED' },
+      { country: 'Turkey',             city: 'Ankara',         tz: 'Europe/Istanbul',                 flag: '\uD83C\uDDF9\uD83C\uDDF7' },
+      { country: 'UAE',                city: 'Dubai',          tz: 'Asia/Dubai',                      flag: '\uD83C\uDDE6\uD83C\uDDEA' },
+      { country: 'Uganda',             city: 'Kampala',        tz: 'Africa/Kampala',                  flag: '\uD83C\uDDFA\uD83C\uDDEC' },
+      { country: 'Ukraine',            city: 'Kyiv',           tz: 'Europe/Kyiv',                     flag: '\uD83C\uDDFA\uD83C\uDDE6' },
+      { country: 'United Kingdom',     city: 'London',         tz: 'Europe/London',                   flag: '\uD83C\uDDEC\uD83C\uDDE7' },
+      { country: 'United States',      city: 'Washington DC',  tz: 'America/New_York',                flag: '\uD83C\uDDFA\uD83C\uDDF8' },
+      { country: 'Uruguay',            city: 'Montevideo',     tz: 'America/Montevideo',              flag: '\uD83C\uDDFA\uD83C\uDDFE' },
+      { country: 'Uzbekistan',         city: 'Tashkent',       tz: 'Asia/Tashkent',                   flag: '\uD83C\uDDFA\uD83C\uDDFF' },
+      { country: 'Venezuela',          city: 'Caracas',        tz: 'America/Caracas',                 flag: '\uD83C\uDDFB\uD83C\uDDEA' },
+      { country: 'Vietnam',            city: 'Hanoi',          tz: 'Asia/Ho_Chi_Minh',                flag: '\uD83C\uDDFB\uD83C\uDDF3' },
+      { country: 'Zimbabwe',           city: 'Harare',         tz: 'Africa/Harare',                   flag: '\uD83C\uDDFF\uD83C\uDDFC' }
     ];
 
     var grid = document.getElementById('grid');
     var timeFormatters = {};
     var dateFormatters = {};
 
+    function makeFormatter(tz) {
+      if (!timeFormatters[tz]) {
+        timeFormatters[tz] = new Intl.DateTimeFormat('en-US', {
+          timeZone: tz, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true
+        });
+        dateFormatters[tz] = new Intl.DateTimeFormat('en-US', {
+          timeZone: tz, weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'
+        });
+      }
+    }
+
     cities.forEach(function(c) {
+      makeFormatter(c.tz);
       var safeId = c.tz.replace(/\//g, '-');
-
-      timeFormatters[c.tz] = new Intl.DateTimeFormat('en-US', {
-        timeZone: c.tz, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true
-      });
-      dateFormatters[c.tz] = new Intl.DateTimeFormat('en-US', {
-        timeZone: c.tz, weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'
-      });
-
       var card = document.createElement('div');
       card.className = 'card';
       card.style.setProperty('--accent', c.accent);
@@ -202,6 +359,55 @@
         '<div class="time" id="time-' + safeId + '">--:--:--</div>' +
         '<div class="date" id="date-' + safeId + '">---</div>';
       grid.appendChild(card);
+    });
+
+    /* Custom slot */
+    var customCard = document.createElement('div');
+    customCard.className = 'custom-card';
+
+    var selectEl = document.createElement('select');
+    selectEl.id = 'countrySelect';
+
+    var defaultOpt = document.createElement('option');
+    defaultOpt.value = '';
+    defaultOpt.textContent = '— Select a country —';
+    selectEl.appendChild(defaultOpt);
+
+    countryList.forEach(function(c) {
+      var opt = document.createElement('option');
+      opt.value = c.country;
+      opt.textContent = c.flag + '  ' + c.country;
+      selectEl.appendChild(opt);
+    });
+
+    customCard.innerHTML = '<div class="custom-slot-label">&#43; Add a country</div>';
+    customCard.appendChild(selectEl);
+
+    var customBody = document.createElement('div');
+    customBody.id = 'customBody';
+    customBody.innerHTML =
+      '<div class="custom-flag" id="customFlag" style="display:none"></div>' +
+      '<div class="custom-city" id="customCity"></div>' +
+      '<div class="custom-country" id="customCountry"></div>' +
+      '<div class="custom-time" id="customTime"></div>' +
+      '<div class="custom-date" id="customDate"></div>';
+    customCard.appendChild(customBody);
+    grid.appendChild(customCard);
+
+    var customTZ = null;
+
+    selectEl.addEventListener('change', function() {
+      var selected = null;
+      for (var i = 0; i < countryList.length; i++) {
+        if (countryList[i].country === selectEl.value) { selected = countryList[i]; break; }
+      }
+      if (!selected) { customTZ = null; return; }
+      customTZ = selected.tz;
+      makeFormatter(customTZ);
+      document.getElementById('customFlag').textContent = selected.flag;
+      document.getElementById('customFlag').style.display = 'block';
+      document.getElementById('customCity').textContent = selected.city;
+      document.getElementById('customCountry').textContent = selected.country;
     });
 
     /* Analog clock */
@@ -225,9 +431,7 @@
       var h = now.getHours() % 12;
       var m = now.getMinutes();
       var s = now.getSeconds();
-
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
       ctx.beginPath();
       ctx.arc(cx, cy, radius, 0, 2 * Math.PI);
       ctx.fillStyle = '#0d1117';
@@ -235,7 +439,6 @@
       ctx.strokeStyle = '#30363d';
       ctx.lineWidth = 2;
       ctx.stroke();
-
       for (var i = 0; i < 12; i++) {
         var angle = (i / 12) * 2 * Math.PI - Math.PI / 2;
         var isQ = (i % 3 === 0);
@@ -247,11 +450,9 @@
         ctx.lineWidth   = isQ ? 2.5 : 1.5;
         ctx.stroke();
       }
-
       drawHand(((h + m / 60) / 12) * 2 * Math.PI - Math.PI / 2, radius * 0.55, 5,   '#e6edf3');
       drawHand(((m + s / 60) / 60) * 2 * Math.PI - Math.PI / 2, radius * 0.78, 3.5, '#e6edf3');
       drawHand((s / 60)            * 2 * Math.PI - Math.PI / 2, radius * 0.88, 1.5, '#58a6ff');
-
       ctx.beginPath();
       ctx.arc(cx, cy, 4, 0, 2 * Math.PI);
       ctx.fillStyle = '#58a6ff';
@@ -281,6 +482,11 @@
         if (timeEl) timeEl.textContent = timeFormatters[c.tz].format(now);
         if (dateEl) dateEl.textContent = dateFormatters[c.tz].format(now);
       });
+
+      if (customTZ) {
+        document.getElementById('customTime').textContent = timeFormatters[customTZ].format(now);
+        document.getElementById('customDate').textContent = dateFormatters[customTZ].format(now);
+      }
     }
 
     updateAll();
